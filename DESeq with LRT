@@ -6,7 +6,6 @@
 >library ("DESeq2")
 >countsTable <- read.csv("/N/slate/emierdma/GSF4155/DESeq/WTadr2.csv", header = TRUE, row.names = 1)
 >experimentData <- read.csv("/N/slate/emierdma/GSF4155/DESeq/experiment.csv", header=TRUE, sep = ",")   # experiments.txt file is where you assign the conditions/samples etc
->rownames(experimentData) <- experimentData$sample
 >dds <- DESeqDataSetFromMatrix(countData = countsTable, colData = experimentData, design = ~ assay + condition + assay:condition)
 >dds$condition <- factor(dds$condition, levels=c("WT","adr2")) 
 >dds <- DESeq(dds, test="LRT", reduced = ~ 1)
