@@ -12,7 +12,7 @@
 > res_LRT <- results(dds, test="LRT")
 > length(which(res_LRT$padj <= 0.05)) 
 [1] 3996
-> write.table(res_LRT, file="/N/slate/emierdma/GSF4155/DESeq/DESeq_LRT_Results_N2vsadr2.tsv", quote=FALSE, sep="\t", na="NA", col.names=NA)
+> write.table(res_LRT, file="/N/slate/emierdma/GSF4155/DESeq/DESeq_LRT_Results_WTvsadr2.tsv", quote=FALSE, sep="\t", na="NA", col.names=NA)
 normcounts <- counts(dds, normalized=T)
 
-write.table(normcounts, file="/N/slate/emierdma/GSF4155/DESeq/normalized_countstable_OP50bound.txt", quote=FALSE, sep="\t", col.names=NA)
+write.table(normcounts, file="/N/slate/emierdma/GSF4155/DESeq/normalized_countstable_WTadr2.txt", quote=FALSE, sep="\t", col.names=NA)
