@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Open R studio on ThinLinc
+# Using Console, load tidyverse
+>library(“tidyverse”)
+>library ("DESeq2")
+>countsTable <- read.csv("/N/slate/emierdma/GSF4155/DESeq/WTadr2.csv", header = TRUE, row.names = 1)
+>experimentData <- read.csv("/N/slate/emierdma/GSF4155/DESeq/experiment.csv", header=TRUE, sep = ",")   # experiments.txt file is where you assign the conditions/samples etc
+>rownames(experimentData) <- experimentData$sample
+>dds <- DESeqDataSetFromMatrix(countData = countsTable, colData = experimentData, design = ~ assay + condition + assay:condition)
+>dds$condition <- factor(dds$condition, levels=c("WT","adr2")) 
+>dds <- DESeq(dds, test="LRT", reduced = ~ 1)
+> res_LRT <- results(dds, test="LRT")
+> length(which(res_LRT$padj <= 0.05)) 
+[1] 3996
+> write.table(res_LRT, file="/N/slate/emierdma/GSF4155/DESeq/DESeq_LRT_Results_N2vsadr2.tsv", quote=FALSE, sep="\t", na="NA", col.names=NA)
+normcounts <- counts(dds, normalized=T)
+
+write.table(normcounts, file="/N/slate/emierdma/GSF4155/DESeq/normalized_countstable_OP50bound.txt", quote=FALSE, sep="\t", col.names=NA)
