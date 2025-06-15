@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# activate rnaseq environment
+module load conda
+conda activate rnaseq
+
+#set up genome directory
+mkdir -p genome
+ASSEMBLY='https://downloads.wormbase.org/releases/WS275/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS275.genomic.fa.gz'
+ANNOTATION='https://downloads.wormbase.org/releases/WS275/species/c_elegans/PRJNA13758/c_elegans.PRJNA13758.WS275.canonical_geneset.gtf.gz'
+curl $ASSEMBLY | gunzip > ./genome/assembly.fasta
+curl $ANNOTATION | gunzip > ./genome/annotation.gtf
+
+#create index directory
+mkdir -p genome/index
+
+#create STAR gemone index
+module load star
+
+STAR \
+  --runThreadN 4 \
+  --runMode genomeGenerate \
+  --genomeDir genome/index \
+  --genomeFastaFiles genome/assembly.fasta \
+  --sjdbGTFfile genome/annotation.gtf \
+  --genomeSAindexNbases 12
+
+#Align reads to genome
+mkdir -p results/aligned
+FASTQ=$GSF4155*
+for FASTQ in ${FASTQ[@]}; do
+  PREFIX=results/aligned/$(basename $FASTQ .fastq)_
+  STAR \
+    --runThreadN 8 \
+    --outFilterMultimapNmax 1 \
+    --outFilterScoreMinOverLread .66 \
+    --outFilterMismatchNmax 10 \
+    --outFilterMismatchNoverLmax .3 \
+    --runMode alignReads \
+    --genomeDir genome/index \
+    --readFilesIn $FASTQ \
+    --outFileNamePrefix $PREFIX \
+    --outSAMattributes All \
+    --outSAMtype BAM SortedByCoordinate
+done 
+
+#index bam files
+BAMS=($(find ./results/aligned -name "*\.bam"))
+for BAM in ${BAMS[@]}; do
+  samtools index $BAM
+  done
+
+#count features
+mkdir -p results/counts
+BAMS=$(find ./results/aligned -name "*\.bam")
+featureCounts \
+  -a genome/annotation.gtf \
+  -o results/counts/counts.tsv \
+  -t gene \
+  -g gene_id \
+  --largestOverlap \
+  --readExtension3 150 \
+  --primary \
+  -s 2 \
+  -T 8 \
+  ${BAMS}
+
+#look at uniquely mapped reads %
+head GSF4155....Log.final.out
