@@ -31,4 +31,4 @@ snakemake --snakefile /N/slate/emierdma/GSF4155/flare/workflow_sailor/Snakefile 
 #editing site annotation
 #in "annotation" conda environment (must have python==3.8.6, pybedtools, pandas)
 #must have annotation .bed file, geneset .gtf file, annotator.sailor.py, .bed files from flare_results directory (directory 7)
-python3 annotator.sailor.py --gtf c_elegans.PRJNA13758.WS275.canonical_geneset.gtf --fwd GSF4155-HAE-input.merged.bam.fwd.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed --rev GSF4155-HAE-input-merged.bam.rev.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed --wb c.elegans.WS275.annotation.final.bed --o /N/slate/emierdma/GSF4155/results/flare_results/HAE-input.annotated.sites.csv
+python3 annotator.sailor.py --gtf c_elegans.PRJNA13758.WS275.canonical_geneset.gtf --fwd GSF4155-HAE-input.merged.bam.fwd.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed --rev GSF4155-HAE-input.merged.bam.rev.readfiltered.formatted.varfiltered.snpfiltered.ranked.bed --wb c.elegans.WS275.annotation.final.bed --o /N/slate/emierdma/GSF4155/results/flare_results/HAE-input.annotated.sites.csv
