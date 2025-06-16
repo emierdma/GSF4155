@@ -23,7 +23,7 @@ module load conda
 conda activate rnaseq
 
 #load singularity every single time you run 
-module load singularity
+module load apptainer
 
 #use the following command to run SAILOR. under "--singularity-args --'bind' you will have to give access to every single directory that has relevant files
 snakemake --snakefile /N/slate/emierdma/GSF4155/flare/workflow_sailor/Snakefile --configfile /N/slate/emierdma/GSF4155/flare/HAEmerged.json --use-singularity --singularity-args '--bind /N/slate/emierdma/GSF4155 --bind /N/slate/emierdma/GSF4155/flare --bind /N/slate/emierdma/GSF4155/genome --bind /N/slate/emierdma/GSF4155/flare/workflow_sailor/scripts --bind /N/slate/emierdma/GSF4155/flare/workflow_sailor --bind /N/slate/emierdma/GSF4155/results/flare_results' -j1
